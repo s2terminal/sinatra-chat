@@ -1,17 +1,23 @@
 version: '3'
 services:
-  app:
+  app1: &app
     build: .
     volumes:
       - .:/app
       - /app/vendor/bundle
-    ports:
-      - 127.0.0.1:4567:4567
     environment:
       - MYSQL_HOST=db
       - MYSQL_USER=root
       - MYSQL_PASS=secret
       - MYSQL_DATABASE=nopochat_development
+  app2:
+    <<: *app
+  web:
+    image: nginx:1.19-alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 127.0.0.1:8080:80
   db:
     image: mysql:8.0
     volumes:
