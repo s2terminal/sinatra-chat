@@ -11,3 +11,5 @@ gem "sinatra", "~> 2.1"
 gem "sinatra-contrib", "~> 2.1"
 
 gem "mysql2", "~> 0.5.3"
+
+gem "ffi", "~> 1.13"

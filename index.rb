@@ -2,9 +2,17 @@ require 'sinatra'
 require 'sinatra/reloader' if settings.development?
 require 'sinatra/cookies'
 require 'mysql2'
+require 'ffi'
 
 configure do
   set :bind, '0.0.0.0'
+end
+
+# Rustから呼び出すモジュールの設定
+module RustLib
+  extend FFI::Library
+  ffi_lib('rust_lib/target/release/librust_lib.so')
+  attach_function(:add_suffix, [:string], :string)
 end
 
 get '/' do
@@ -12,7 +20,7 @@ get '/' do
   chats = chats_fetch
   erb :index, locals: {
     name: name,
-    chats: chats.map{ |chat| add_suffix(chat) }
+    chats: chats.map{ |chat| { **chat, content: RustLib::add_suffix(chat[:content]).force_encoding("UTF-8") } }
   }
 end
 
@@ -77,10 +85,6 @@ get '/initialize' do
   user_push('admin', 'admin')
 
   redirect '/'
-end
-
-def add_suffix(chat)
-  { **chat, content: "#{chat[:content]}も" }
 end
 
 def db_client()
