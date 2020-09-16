@@ -24,7 +24,7 @@ end
 
 post '/login' do
   if user = user_fetch(params['name'], params['pass'])
-    cookies[:session_id] = SecureRandom.uuid if cookies[:session_id].nil?
+    cookies[:session_id] = SecureRandom.uuid if cookies[:session_id].nil? || cookies[:session_id] == ""
     session_save(cookies[:session_id], { name: user[:name] })
   end
   redirect back
@@ -122,6 +122,7 @@ def session_save(session_id, obj)
 end
 
 def session_fetch(session_id)
+  return if session_id == ""
   result = db_client.prepare("SELECT * FROM sessions WHERE session_id = ?").execute(session_id).first
   return unless result
   JSON.parse(result&.[](:value_json))
