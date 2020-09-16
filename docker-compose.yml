@@ -19,7 +19,7 @@ services:
     ports:
       - 127.0.0.1:8080:80
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     volumes:
       - .:/app
       - /var/lib/mysql

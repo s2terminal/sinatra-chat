@@ -42,7 +42,7 @@ get '/initialize' do
     :password => ENV['MYSQL_PASS']
   )
   client.query("DROP DATABASE IF EXISTS #{ENV['MYSQL_DATABASE']}")
-  client.query("CREATE DATABASE IF NOT EXISTS #{ENV['MYSQL_DATABASE']}")
+  client.query("CREATE DATABASE IF NOT EXISTS #{ENV['MYSQL_DATABASE']} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci")
   client = db_client
   client.query(<<-EOS
       CREATE TABLE IF NOT EXISTS chats (

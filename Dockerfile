@@ -1,7 +1,11 @@
-FROM ruby:2.7-alpine
+FROM ruby:2.7-slim
 WORKDIR /app
 
-RUN apk add --no-cache build-base mysql-dev
+RUN apt-get update && apt-get install -y \
+  libmariadb-dev \
+  build-essential \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile ./
 COPY Gemfile.lock ./
