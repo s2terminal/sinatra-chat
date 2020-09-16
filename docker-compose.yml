@@ -7,3 +7,15 @@ services:
       - /app/vendor/bundle
     ports:
       - 127.0.0.1:4567:4567
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASS=secret
+      - MYSQL_DATABASE=nopochat_development
+  db:
+    image: mysql:8.0
+    volumes:
+      - .:/app
+      - /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
